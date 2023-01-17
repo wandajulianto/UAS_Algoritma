@@ -5,21 +5,22 @@ using namespace std;
 
 string namaPetugas, namaCustomer, namaHewan, jenisLayanan;
 int kodeLayanan, biaya, jumlahHewan, total, uangBayar, uangKembali;
-char kodeHewan, dataInput;;
+char kodeHewan, inputLagi;
 int no = 1;
 
 void judul()
 {
-	cout << "\t\t\t======================================================================\n";
-	cout << "\t\t\t\t\t SISTEM PEMBAYARAN PENITIPAN HEWAN \n";
-	cout << "\t\t\t\t\t\t\"WXYZ PETSHOP\"\n";
-	cout << "\t\t\t======================================================================\n";
+	cout
+		<< "\t\t\t======================================================================\n"
+		<< "\t\t\t\t\t SISTEM PEMBAYARAN PENITIPAN HEWAN\n"
+		<< "\t\t\t\t\t\t\"WXYZ PETSHOP\"\n"
+		<< "\t\t\t======================================================================\n";
 
 }
 
 void inputData()
 {
-	cout << "\tNama Petugas : ";
+	cout << "\tNama Petugas  : ";
 	cin >> namaPetugas;
 	cout << "\tNama Customer : ";
 	cin >> namaCustomer;
@@ -50,8 +51,11 @@ void inputData()
 
 void displayData()
 {
-	cout << "\tNama Petugas : " << namaPetugas << endl;
+	cout << "\tNama Petugas  : " << namaPetugas << endl;
 	cout << "\tNama Customer : " << namaCustomer << endl;
+	/*cout << "\tInput Data Lagi [Y/T] : ";
+	cin >> inputLagi;*/
+	cout << endl;
 
 	cout << "\t=========================================================================================================\n";
 	cout
@@ -67,28 +71,34 @@ void displayData()
 		<< endl
 		<< "\t=========================================================================================================\n";
 
-	for (int i = no; i < 10; i++) {
-		cout
-			<< "\t"
-			<< left << setw(8) << i
-			<< left << setw(12) << kodeHewan
-			<< left << setw(18) << namaHewan
-			<< left << setw(14) << kodeLayanan
-			<< left << setw(18) << jenisLayanan
-			<< left << setw(18) << biaya
-			<< left << setw(11) << jumlahHewan
-			<< left << setw(8) << total
-			<< endl;
-	}
+	cout
+		<< "\t"
+		<< left << setw(8) << no
+		<< left << setw(12) << kodeHewan
+		<< left << setw(18) << namaHewan
+		<< left << setw(14) << kodeLayanan
+		<< left << setw(18) << jenisLayanan
+		<< left << setw(18) << biaya
+		<< left << setw(11) << jumlahHewan
+		<< left << setw(8) << total
+		<< endl;
 
 	cout << "\t=========================================================================================================\n";
+
+	cout << "\tTotal Bayar  : " << total << endl;
+	cout << "\tUang Bayar   : ";
+	cin >> uangBayar;
+	cout << "\tUang Kembali : " << uangBayar - total << endl;
 }
 
 int main()
 {
 	judul();
+	cout << endl;
 	inputData();
+	cout << endl;
 	judul();
+	cout << endl;
 	displayData();
 
 
