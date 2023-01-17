@@ -12,10 +12,9 @@ void judul()
 {
 	cout
 		<< "\t\t\t======================================================================\n"
-		<< "\t\t\t\t\t SISTEM PEMBAYARAN PENITIPAN HEWAN\n"
+		<< "\t\t\t\t\t SISTEM PEMBAYARAN PENITIPAN HEWAN \n"
 		<< "\t\t\t\t\t\t\"WXYZ PETSHOP\"\n"
 		<< "\t\t\t======================================================================\n";
-
 }
 
 void inputData()
