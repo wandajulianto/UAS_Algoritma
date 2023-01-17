@@ -5,9 +5,9 @@ using namespace std;
 
 string namaPetugas, namaCustomer, namaHewan, jenisLayanan;
 int kodeLayanan, biaya, jumlahHewan, total, uangBayar, uangKembali;
-char kodeHewan, cekInputLagi;
-bool inputLagi = false;
+char kodeHewan, cekInputLagi, cekYT;
 int no = 1;
+bool inputLagi = false;
 
 void judul()
 {
@@ -49,22 +49,10 @@ void inputData()
 	total = biaya * jumlahHewan;
 }
 
-void subJudul()
+void displayData()
 {
 	cout << "\tNama Petugas  : " << namaPetugas << endl;
 	cout << "\tNama Customer : " << namaCustomer << endl;
-	cout << "\tInput Data Lagi [Y/T] : ";
-	cin >> cekInputLagi;
-	cout << endl;
-
-	if (cekInputLagi == 'Y') {
-		inputLagi = true;
-	}
-}
-
-void displayData()
-{
-	subJudul();
 
 	cout << "\t=========================================================================================================\n";
 	cout
@@ -98,9 +86,22 @@ void displayData()
 	cout << "\tUang Bayar   : ";
 	cin >> uangBayar;
 	cout << "\tUang Kembali : " << uangBayar - total << endl;
+
+	cout << "\tInput Data Lagi [Y/T] : ";
+	cin >> cekInputLagi;
+	cout << endl;
+
+	cekYT = toupper((char)cekInputLagi);
+
+	if (cekYT == 'Y') {
+		inputLagi = true;
+	}
+	else if (cekYT == 'T') {
+		inputLagi = false;
+	}
 }
 
-int main()
+void allOutput()
 {
 	judul();
 	cout << endl;
@@ -109,17 +110,14 @@ int main()
 
 	judul();
 	cout << endl;
-	subJudul();
-	cout << endl;
-
-	do {
-		judul();
-		cout << endl;
-		inputData();
-		cout << endl;
-	} while (inputLagi);
-
 	displayData();
+}
+
+int main()
+{
+	do {
+		allOutput();
+	} while (inputLagi);
 
 	return 0;
 }
