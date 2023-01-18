@@ -1,12 +1,21 @@
 #include <iostream>
 #include <iomanip>
 #include <cctype>
+#include <vector>
 using namespace std;
 
-string namaPetugas, namaCustomer, namaHewan, jenisLayanan;
-int kodeLayanan, biaya, jumlahHewan, total, uangBayar, uangKembali;
-char kodeHewan, cekInputLagi, cekYT;
-int no = 1;
+struct Data {
+	string namaHewan;
+	int kodeLayanan, jumlahHewan, uangBayar, total;
+	double biaya, uangKembali;
+	char kodeHewan;
+};
+
+vector<Data> dataList;
+
+string namaPetugas, namaCustomer, jenisLayanan;
+int no;
+char cekInputLagi, cekYT;
 bool inputLagi = false;
 
 void judul()
@@ -14,45 +23,58 @@ void judul()
 	cout
 		<< "\t\t\t======================================================================\n"
 		<< "\t\t\t\t\t SISTEM PEMBAYARAN PENITIPAN HEWAN \n"
-		<< "\t\t\t\t\t\t\"WXYZ PETSHOP\"\n"
+		<< "\t\t\t\t\t\t\"SABO PETSHOP\"\n"
 		<< "\t\t\t======================================================================\n";
 }
 
 void inputData()
 {
+	Data data;
+
 	cout << "\tNama Petugas  : ";
 	cin >> namaPetugas;
 	cout << "\tNama Customer : ";
 	cin >> namaCustomer;
 	cout << "\tNama Hewan : ";
-	cin >> namaHewan;
+	cin >> data.namaHewan;
 	cout << "\tJenis Layanan : \n\t1. Lux\n \t2. Intensif\n \tPilih Jenis Layanan [1/2] : ";
-	cin >> kodeLayanan;
+	cin >> data.kodeLayanan;
 	cout << "\tJumlah Hewan : ";
-	cin >> jumlahHewan;
+	cin >> data.jumlahHewan;
 	cout << endl;
 
-	kodeHewan = toupper((char)namaHewan[0]);
+	data.kodeHewan = toupper((char)data.namaHewan[0]);
 
-	if (kodeLayanan == 1) {
-		jenisLayanan = "Lux";
-		biaya = 250000;
-	}
-	else if (kodeLayanan == 2) {
-		jenisLayanan = "Intensif";
-		biaya = 300000;
-	}
-	else {
-		cout << "\tMohon maaf menu layanan belum tersedia\n";
-	}
+	data.biaya = data.kodeLayanan == 1 ? 250000 : 300000;
 
-	total = biaya * jumlahHewan;
+	data.total = data.biaya * data.jumlahHewan;
+
+	dataList.push_back(data);
+}
+
+void subJudul()
+{
+	cout << "\tNama Petugas  : " << namaPetugas << endl;
+	cout << "\tNama Customer : " << namaCustomer << endl;
+	cout << "\tInput Data Lagi [Y/T] : ";
+	cin >> cekInputLagi;
+	cout << endl;
+
+	cekYT = toupper((char)cekInputLagi);
+
+	if (cekYT == 'Y') {
+		inputLagi = true;
+	}
+	else if (cekYT == 'T') {
+		inputLagi = false;
+	}
 }
 
 void displayData()
 {
 	cout << "\tNama Petugas  : " << namaPetugas << endl;
 	cout << "\tNama Customer : " << namaCustomer << endl;
+	cout << endl;
 
 	cout << "\t=========================================================================================================\n";
 	cout
@@ -68,56 +90,50 @@ void displayData()
 		<< endl
 		<< "\t=========================================================================================================\n";
 
-	cout
-		<< "\t"
-		<< left << setw(8) << no
-		<< left << setw(12) << kodeHewan
-		<< left << setw(18) << namaHewan
-		<< left << setw(14) << kodeLayanan
-		<< left << setw(18) << jenisLayanan
-		<< left << setw(18) << biaya
-		<< left << setw(11) << jumlahHewan
-		<< left << setw(8) << total
-		<< endl;
+	for (int i = 0; i < dataList.size(); i++) {
+		cout
+			<< "\t"
+			<< left << setw(8) << i + 1
+			<< left << setw(12) << dataList[i].kodeHewan
+			<< left << setw(18) << dataList[i].namaHewan
+			<< left << setw(14) << dataList[i].kodeLayanan
+			<< left << setw(18) << (dataList[i].kodeLayanan == 1 ? "Lux" : "Intensif")
+			<< left << setw(18) << dataList[i].biaya
+			<< left << setw(11) << dataList[i].jumlahHewan
+			<< left << setw(8) << dataList[i].total
+			<< endl;
+	}
 
 	cout << "\t=========================================================================================================\n";
 
-	cout << "\tTotal Bayar  : " << total << endl;
+	cout << "\tTotal Bayar  : " << dataList.back().total << endl;
 	cout << "\tUang Bayar   : ";
-	cin >> uangBayar;
-	cout << "\tUang Kembali : " << uangBayar - total << endl;
-
-	cout << "\tInput Data Lagi [Y/T] : ";
-	cin >> cekInputLagi;
-	cout << endl;
-
-	cekYT = toupper((char)cekInputLagi);
-
-	if (cekYT == 'Y') {
-		inputLagi = true;
+	cin >> dataList.back().uangBayar;
+	
+	while (dataList.back().uangBayar < dataList.back().total) {
+		cout << "\tMohon maaf uang tidak cukup, silahkan input kembali!\n";
+		cout << "\tUang Bayar   : ";
+		cin >> dataList.back().uangBayar;
 	}
-	else if (cekYT == 'T') {
-		inputLagi = false;
-	}
-}
 
-void allOutput()
-{
-	judul();
-	cout << endl;
-	inputData();
-	cout << endl;
-
-	judul();
-	cout << endl;
-	displayData();
+	cout << "\tUang Kembali : " << dataList.back().uangBayar - dataList.back().total << endl;
 }
 
 int main()
 {
 	do {
-		allOutput();
+		judul();
+		cout << endl;
+		inputData();
+		cout << endl;
+		judul();
+		cout << endl;
+		subJudul();
 	} while (inputLagi);
+
+	judul();
+	cout << endl;
+	displayData();
 
 	return 0;
 }
