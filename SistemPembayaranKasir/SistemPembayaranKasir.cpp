@@ -2,18 +2,21 @@
 #include <iomanip>
 #include <cctype>
 #include <vector>
+#include <numeric>
+#include <algorithm>
+#include <string>
 using namespace std;
 
 struct Data {
 	string namaHewan;
-	int kodeLayanan, jumlahHewan, uangBayar, total;
-	double biaya, uangKembali;
+	int kodeLayanan, jumlahHewan, uangBayar, subTotal, biaya, uangKembali;
 	char kodeHewan;
 };
 
 vector<Data> dataList;
 
 string namaPetugas, namaCustomer, jenisLayanan;
+int total;
 char cekInputLagi, cekYT;
 bool inputLagi = false;
 
@@ -44,9 +47,16 @@ void inputData()
 
 	data.kodeHewan = toupper((char)data.namaHewan[0]);
 
-	data.biaya = data.kodeLayanan == 1 ? 250000 : 300000;
+	transform(data.namaHewan.begin(), data.namaHewan.end(), data.namaHewan.begin(), toupper);
 
-	data.total = data.biaya * data.jumlahHewan;
+	if (data.namaHewan == "HAMSTER") {
+		data.biaya = data.kodeLayanan == 1 ? 50000 : 100000;
+	}
+	else {
+		data.biaya = data.kodeLayanan == 1 ? 250000 : 300000;
+	}
+
+	data.subTotal = data.biaya * data.jumlahHewan;
 
 	dataList.push_back(data);
 }
@@ -99,23 +109,31 @@ void displayData()
 			<< left << setw(18) << (dataList[i].kodeLayanan == 1 ? "Lux" : "Intensif")
 			<< left << setw(18) << dataList[i].biaya
 			<< left << setw(11) << dataList[i].jumlahHewan
-			<< left << setw(8) << dataList[i].total
+			<< left << setw(8) << dataList[i].subTotal
 			<< endl;
 	}
 
 	cout << "\t=========================================================================================================\n";
 
-	cout << "\tTotal Bayar  : " << dataList.back().total << endl;
+	total = accumulate(
+		dataList.begin(),
+		dataList.end(), 0,
+		[] (int acc, Data p) {
+			return acc + p.subTotal;
+		}
+	);
+
+	cout << "\tTotal Bayar  : " << total << endl;
 	cout << "\tUang Bayar   : ";
 	cin >> dataList.back().uangBayar;
 	
-	while (dataList.back().uangBayar < dataList.back().total) {
+	while (dataList.back().uangBayar < dataList.back().subTotal) {
 		cout << "\tMohon maaf uang tidak cukup, silahkan input kembali!\n";
 		cout << "\tUang Bayar   : ";
 		cin >> dataList.back().uangBayar;
 	}
 
-	cout << "\tUang Kembali : " << dataList.back().uangBayar - dataList.back().total << endl;
+	cout << "\tUang Kembali : " << dataList.back().uangBayar - total << endl;
 }
 
 int main()
